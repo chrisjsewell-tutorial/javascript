@@ -1,0 +1,63 @@
+<html>
+  <head>
+    <script src="https://unpkg.com/cjs_tutorial"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <h1>Lets plot the harmonic oscillator!</h1>
+    <div>
+      <canvas id="myChart"></canvas>
+    </div>
+    <script>
+      const vmax = 8
+      const xmin = -Math.sqrt(2 * window.cjsExample.eigenvalue(vmax))
+      const xmax = -xmin
+      const xs = window.cjsExample.linspace(xmin, xmax, 1000)
+      const ps = window.cjsExample.potential_energy(xs)
+
+      const datasets = [
+        {
+          label: "Potential well",
+          data: xs.map(function (x, i) {
+            return { x: x, y: ps[i] }
+          }),
+          borderColor: "black",
+          showLine: true
+        }
+      ]
+
+      colors = ["red", "blue", "green", "yellow", "orange", "purple", "brown", "black"]
+
+      for (const v of [0, 1, 2, 3, 4, 5, 6, 7]) {
+        const ys = window.cjsExample.psiSquared(v, xs, window.cjsExample.eigenvalue(v))
+        const xy = xs.map(function (x, i) {
+          return { x: x, y: ys[i] }
+        })
+        datasets.push({
+          label: `v=${v}`,
+          data: xy,
+          borderColor: colors[v],
+          showLine: true
+        })
+      }
+
+      const data = {
+        datasets: datasets
+      }
+      const config = {
+        type: "scatter",
+        data: data,
+        options: {
+          scales: {
+            x: {
+              type: "linear",
+              position: "bottom"
+            }
+          }
+        }
+      }
+      const myChart = new Chart(document.getElementById("myChart"), config)
+    </script>
+  </body>
+</html>
